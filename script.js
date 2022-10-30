@@ -7,7 +7,7 @@ const playerFactory = (name, symbol) => {
 
 // A module pattern for the gameboard and displayController
 const gameBoard = (() => {
-    const board = ["", "", "", "", "", "", "", "", ""];
+    const board = ["X", "", "", "", "", "O", "", "", ""];
 })();
 
 const displayController = (() => {

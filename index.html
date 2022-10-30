@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
     <header>
         <h1>Tic Tac Toe</h1>
@@ -16,13 +18,45 @@
         <div class="startGame">
             <button>Start Game</button>
         </div>
-        <div class="selectOpponent">
-            <button>AI Bot</button>
-            <button>Player vs Player</button>
-        </div>
-        <div class="gameGrid"></div>
-        <div class="restart"></div>
+        <div class="gameStarted active">
+            <div class="selectOpponent">
+                <button>AI Bot</button>
+                <button>Player vs Player</button>
+            </div>
+            <div class="gameGrid">
+                <div class="field" data-index="0"></div>
+                <div class="field" data-index="1"></div>
+                <div class="field" data-index="2"></div>
+                <div class="field" data-index="3"></div>
+                <div class="field" data-index="4"></div>
+                <div class="field" data-index="5"></div>
+                <div class="field" data-index="6"></div>
+                <div class="field" data-index="7"></div>
+                <div class="field" data-index="8"></div>
+            </div>
+            <div class="restart">
+                <button>Restart</button>
+            </div>
+            <div class="overlay"></div>
+            <div class="modal" id="playersModal">
+                <form class="playersForm" id="playersForm">
+                    <h3>What are yours names?</h3>
+                    <div>
+                        <label for="player1">Player 1</label>
+                        <input type="text" id="player1" name="player1" maxlength="100" required>
+                    </div>
+                    <div>
+                        <label for="player2">Player 2</label>
+                        <input type="text" id="player2" name="player2" maxlength="100" required>
+                    </div>
+                    <div class="formButtons">
+                        <button type="submit">Submit</button>
+                        <button type="reset">Reset</button>
+                    </div>
+                </form>
+            </div>
     </main>
     <footer></footer>
 </body>
+
 </html>
