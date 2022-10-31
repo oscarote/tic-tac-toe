@@ -51,6 +51,7 @@ main {
     transition: 0.2s ease-in-out;
     display: flex;
     place-content: center;
+    margin-top: 1rem;
 }
 
 .startGame {
@@ -77,6 +78,7 @@ main {
 
 .restart {
     place-self: center;
+    margin-top: 1rem;
 }
 
 /* Buttons */
@@ -100,6 +102,14 @@ button:active {
 }
 
 /* Game Grid */
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
 .gameGrid {
     display: grid;
     grid-template: repeat(3, 150px) / repeat(3, 150px);
@@ -108,6 +118,12 @@ button:active {
 
 .gameGrid .field {
     background-color: var(--gameboardBg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 8rem;
+    cursor: pointer;
 }
 
 /* Input modal */
@@ -128,6 +144,42 @@ button:active {
     transform: translate(-50%, -50%) scale(1);
 }
 
+.playersForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.playersForm h3 {
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 1.7rem;
+}
+
+.playersForm input {
+    border: none;
+    border-radius: 10px;
+    font-size: inherit;
+    padding: 10px;
+}
+
+.playersForm label {
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.playersForm div {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+}
+
+.playersForm .formButtons {
+    display: flex;
+    place-content: center;
+    gap: 1rem;
+}
+
 /* Overlay */
 .overlay {
     position: fixed;
@@ -141,6 +193,19 @@ button:active {
 
 .overlay.active {
     display: block;
+}
+
+/* Restart section */
+.restart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.restart .playerMsg {
+    font-size: 1.5rem;
+    font-weight: 500;
+    word-break: normal;
 }
 
 /* Footer */

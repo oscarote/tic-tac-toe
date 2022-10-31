@@ -15,39 +15,42 @@
         <h1>Tic Tac Toe</h1>
     </header>
     <main>
-        <div class="startGame">
-            <button>Start Game</button>
+        <div class="startGame active">
+            <button id="startGameBtn">Start Game</button>
         </div>
-        <div class="gameStarted active">
+        <div class="gameStarted">
             <div class="selectOpponent">
-                <button>AI Bot</button>
-                <button>Player vs Player</button>
+                <button id="aiBot">AI Bot</button>
+                <button id="playerVsPlayer">Player vs Player</button>
             </div>
-            <div class="gameGrid">
-                <div class="field" data-index="0"></div>
-                <div class="field" data-index="1"></div>
-                <div class="field" data-index="2"></div>
-                <div class="field" data-index="3"></div>
-                <div class="field" data-index="4"></div>
-                <div class="field" data-index="5"></div>
-                <div class="field" data-index="6"></div>
-                <div class="field" data-index="7"></div>
-                <div class="field" data-index="8"></div>
-            </div>
-            <div class="restart">
-                <button>Restart</button>
+            <div class="game">
+                <div class="gameGrid">
+                    <div class="field" data-index="0"></div>
+                    <div class="field" data-index="1"></div>
+                    <div class="field" data-index="2"></div>
+                    <div class="field" data-index="3"></div>
+                    <div class="field" data-index="4"></div>
+                    <div class="field" data-index="5"></div>
+                    <div class="field" data-index="6"></div>
+                    <div class="field" data-index="7"></div>
+                    <div class="field" data-index="8"></div>
+                </div>
+                <div class="restart">
+                    <button id="gameBoardRestart">Restart</button>
+                    <div class="playerMsg"></div>
+                </div>
             </div>
             <div class="overlay"></div>
             <div class="modal" id="playersModal">
-                <form class="playersForm" id="playersForm">
-                    <h3>What are yours names?</h3>
+                <form class="playersForm">
+                    <h3>What are your names?</h3>
                     <div>
-                        <label for="player1">Player 1</label>
-                        <input type="text" id="player1" name="player1" maxlength="100" required>
+                        <label for="player1Name">Player 1</label>
+                        <input type="text" id="player1Name" name="player1Name" maxlength="100" required>
                     </div>
                     <div>
-                        <label for="player2">Player 2</label>
-                        <input type="text" id="player2" name="player2" maxlength="100" required>
+                        <label for="player2Name">Player 2</label>
+                        <input type="text" id="player2Name" name="player2Name" maxlength="100" required>
                     </div>
                     <div class="formButtons">
                         <button type="submit">Submit</button>
