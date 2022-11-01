@@ -24,6 +24,7 @@
                 <button id="playerVsPlayer">Player vs Player</button>
             </div>
             <div class="game">
+                <div class="playerMsg"></div>
                 <div class="gameGrid">
                     <div class="field" data-index="0"></div>
                     <div class="field" data-index="1"></div>
@@ -37,10 +38,17 @@
                 </div>
                 <div class="restart">
                     <button id="gameBoardRestart">Restart</button>
-                    <div class="playerMsg"></div>
+                    <button id="switchMarks">Switch Marks</button>
                 </div>
             </div>
             <div class="overlay"></div>
+            <div class="modal" id="botModal">
+                    <h3>Choose your difficulty</h3>
+                    <div class="Buttons">
+                        <button id="botEasyBtn">Easy</button>
+                        <button id="botHardBtn">Hard</button>
+                    </div>
+            </div>
             <div class="modal" id="playersModal">
                 <form class="playersForm">
                     <h3>What are your names?</h3>
