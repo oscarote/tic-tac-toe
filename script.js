@@ -90,9 +90,9 @@ const gameBoard = (() => {
         setField(index, currentPlayer);
         checkWinner(currentPlayer);
         // If playing vs computer
-        if (winner === "" && gameMode === "botEasy") {
+        if (board.includes("") && winner === "" && gameMode === "botEasy") {
             aiBotPlay(aiBotEasy, bot);
-        } else if (winner === "" && gameMode === "botHard") {
+        } else if (board.includes("") && winner === "" && gameMode === "botHard") {
             aiBotPlay(aiBotHard, bot);
         }
         // Display next turn or winner message
@@ -156,6 +156,8 @@ const gameBoard = (() => {
         }
         return randomField;
     };
+
+    const aiBotHard = () => {};
 
     return { createPlayer, switchMarks, getField, resetBoard, playRound, setGameMode, isGameOver };
 })();
@@ -276,5 +278,3 @@ const displayController = (() => {
 
     return { refreshGameBoard, displayTurn }
 })();
-
-// Testing
