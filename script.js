@@ -13,6 +13,10 @@ const gameBoard = (() => {
     let round = 1;
     let winner = "";
     let gameMode = "";
+    let botPlayer = "";
+    let humanPlayer = "";
+    let modBoard = [];
+
 
     const createPlayer = (playerNumber, name) => {
         let symbol = "";
@@ -30,11 +34,11 @@ const gameBoard = (() => {
         player1.name = player2.name;
         player2.name = temp;
         resetBoard();
-        if (gameMode === "botEasy") {
+        if ((gameMode === "botEasy" || gameMode === "botHard") && player1.name === "Bot") {
             displayController.displayTurn(player2.name, false);
             displayController.refreshGameBoard();
-        } else if (gameMode === "botHard") {
-            displayController.displayTurn(player2.name, false);
+        } else if ((gameMode === "botEasy" || gameMode === "botHard") && player1.name !== "Bot") {
+            displayController.displayTurn(player1.name, false);
             displayController.refreshGameBoard();
         } else {
             displayController.displayTurn(player1.name, false);
@@ -64,11 +68,11 @@ const gameBoard = (() => {
         round = 1;
         displayController.refreshGameBoard();
         if (gameMode === "botEasy" && player1.name === "Bot") {
-            aiBotPlay(aiBotEasy, player1);
+            aiBotPlay("easy", player1);
             displayController.refreshGameBoard();
             displayController.displayTurn(player2.name, false);
         } else if (gameMode === "botHard" && player1.name === "Bot") {
-            aiBotPlay(aiBotHard, player1);
+            aiBotPlay("hard", player1);
             displayController.refreshGameBoard();
             displayController.displayTurn(player2.name, false);
         } else if ((gameMode === "botEasy" || gameMode === "botHard") && player1.name !== "Bot") {
@@ -77,33 +81,40 @@ const gameBoard = (() => {
     };
 
     const playRound = (index) => {
-        let currentPlayer = "";
-        let bot = "";
-        if (round % 2 === 0) {
-            currentPlayer = player2;
-            bot = player1;
+        if (player1.name === "Bot") {
+            botPlayer = player1;
+            humanPlayer = player2;
+        } else if (player2.name === "Bot") {
+            botPlayer = player2;
+            humanPlayer = player1;
+        } else if (gameMode = "pvp" && round % 2 === 0) {
+            humanPlayer = player2;
+            round++;
         } else {
-            currentPlayer = player1;
-            bot = player2;
+            humanPlayer = player1;
+            round++;
         }
-        round++;
-        setField(index, currentPlayer);
-        checkWinner(currentPlayer);
+
+        setField(index, humanPlayer);
+        if (checkWinner(board, humanPlayer)) winner = humanPlayer;
+
         // If playing vs computer
         if (board.includes("") && winner === "" && gameMode === "botEasy") {
-            aiBotPlay(aiBotEasy, bot);
+            aiBotPlay("easy", botPlayer);
         } else if (board.includes("") && winner === "" && gameMode === "botHard") {
-            aiBotPlay(aiBotHard, bot);
+            modBoard = transformBoard(board);
+            aiBotPlay("hard", botPlayer);
         }
+
         // Display next turn or winner message
-        if (winner === currentPlayer) {
-            displayController.displayTurn(currentPlayer.name, true);
-        } else if (winner !== "" && winner !== currentPlayer) {
-            displayController.displayTurn(getNextName(currentPlayer), true);
-        } else if (gameMode === "botEasy") {
-            displayController.displayTurn(currentPlayer.name, false);
+        if (winner === humanPlayer) {
+            displayController.displayTurn(humanPlayer.name, true);
+        } else if (winner !== "" && winner !== humanPlayer) {
+            displayController.displayTurn(getNextName(humanPlayer), true);
+        } else if (gameMode === "botEasy" || gameMode === "botHard") {
+            displayController.displayTurn(humanPlayer.name, false);
         } else {
-            displayController.displayTurn(getNextName(currentPlayer), false);
+            displayController.displayTurn(getNextName(humanPlayer), false);
         }
     };
 
@@ -119,7 +130,7 @@ const gameBoard = (() => {
         }
     };
 
-    const checkWinner = (currentPlayer) => {
+    const checkWinner = (board, player) => {
         const winningConditions = [
             [0, 1, 2],
             [3, 4, 5],
@@ -130,21 +141,27 @@ const gameBoard = (() => {
             [0, 4, 8],
             [2, 4, 6],
         ];
+        let gameWon = false;
         winningConditions.forEach((row) => {
             let a = row[0];
             let b = row[1];
             let c = row[2];
-            if (board[a] !== "" && board[a] === board[b] && board[b] === board[c]) {
-                winner = currentPlayer;
-            };
+            if (board[a] !== "" && board[a] === board[b] && board[b] === board[c] && board[a] === player.symbol) {
+                gameWon = true;
+            }
         });
+        return gameWon;
     };
 
     // AI Bot
     const aiBotPlay = (difficulty, botPlayer) => {
-        setField(difficulty(), botPlayer);
+        if (difficulty === "easy") {
+            setField(aiBotEasy(), botPlayer);
+        } else {
+            setField(aiBotHard(botPlayer), botPlayer);
+        }
         round++;
-        checkWinner(botPlayer);
+        if (checkWinner(board, botPlayer)) winner = botPlayer;
     };
 
     const aiBotEasy = () => {
@@ -157,7 +174,80 @@ const gameBoard = (() => {
         return randomField;
     };
 
-    const aiBotHard = () => {};
+    const aiBotHard = (bot) => {
+        return minimax(modBoard, bot).index;
+    };
+
+    // Transform empty spaces of board array to his index number
+    const transformBoard = (currentBoard) => {
+        let transBoard = [];
+        for (let i = 0; i < currentBoard.length; i++) {
+            if (currentBoard[i] === "") {
+                transBoard[i] = i;
+            } else {
+                transBoard[i] = currentBoard[i];
+            }
+        }
+        return transBoard;
+    };
+
+    // Get transformed board and delete X and O leaving only numbers (empty spaces)
+    const emptySquares = () => {
+        return modBoard.filter(element => typeof element === "number");
+    };
+    
+    // Minimax algorithm function
+    const minimax = (newBoard, currentPlayer) => {
+        let availSpots = emptySquares();
+
+        if (checkWinner(newBoard, humanPlayer)) {
+            return { score: -10 };
+        } else if (checkWinner(newBoard, botPlayer)) {
+            return { score: 10 };
+        } else if (availSpots.length === 0) {
+            return { score: 0 };
+        }
+
+        let moves = [];
+        for (let i = 0; i < availSpots.length; i++) {
+            let move = {};
+            move.index = newBoard[availSpots[i]];
+            newBoard[availSpots[i]] = currentPlayer.symbol;
+    
+            if (currentPlayer == botPlayer) {
+                let result = minimax(newBoard, humanPlayer);
+                move.score = result.score;
+            } else {
+                let result = minimax(newBoard, botPlayer);
+                move.score = result.score;
+            }
+    
+            newBoard[availSpots[i]] = move.index;
+    
+            moves.push(move);
+        }
+
+        let bestMove = "";
+        if (currentPlayer === botPlayer) {
+            let bestScore = -10000;
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score > bestScore) {
+                    bestScore = moves[i].score;
+                    bestMove = i;
+                }
+            }
+        } else {
+            let bestScore = 10000;
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score < bestScore) {
+                    bestScore = moves[i].score;
+                    bestMove = i;
+                }
+            }
+        }
+
+        return moves[bestMove];
+    };
 
     return { createPlayer, switchMarks, getField, resetBoard, playRound, setGameMode, isGameOver };
 })();
